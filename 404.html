@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>页面去太空旅行了 - 404</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', '微软雅黑', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stars {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="1" fill="white" opacity="0.7"/></svg>');
+            animation: twinkle 2s infinite;
+        }
+
+        .container {
+            text-align: center;
+            color: white;
+            position: relative;
+            z-index: 1;
+            padding: 2rem;
+        }
+
+        .astronaut {
+            width: 200px;
+            margin-bottom: 2rem;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        p {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .go-home {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border: 2px solid white;
+            border-radius: 50px;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .go-home:hover {
+            background: white;
+            color: #6366f1;
+            transform: scale(1.05);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.8; }
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            .astronaut { width: 150px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars"></div>
+    <div class="container">
+        <svg class="astronaut" viewBox="0 0 512 512" fill="currentColor">
+            <!-- 宇航员SVG图标可替换为实际图形 -->
+            <path d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256s256-114.6 256-256S397.4 0 256 0zM128 288c-17.7 0-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32S145.7 288 128 288zM256 448c-35.3 0-64-28.7-64-64h128C320 419.3 291.3 448 256 448zM384 288c-17.7 0-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32S401.7 288 384 288z"/>
+        </svg>
+        <h1>404</h1>
+        <p>您寻找的页面已开始星际旅行<br>暂时不在这个坐标位置上</p>
+        <a href="/" class="go-home">
+            🚀 返回安全基地
+        </a>
+    </div>
+</body>
+</html>

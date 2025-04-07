@@ -1,0 +1,6 @@
+# robots.txt generated at http://seo.yunser.net/
+User-agent: *
+Disallow: 
+Sitemap: https://www.star-search.cn/
+Sitemap: https://www.star-search.cn/old/index.html
+Sitemap: https://www.star-search.cn/old/myself/index.html

@@ -1,0 +1,157 @@
+/* 设置页面专用样式 */
+body {
+    font-family: 'Noto Sans SC Sliced', PingFangSC-Light, Microsoft YaHei UI, Microsoft YaHei, helvetica, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+.settings-container {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 0.5s ease-in-out;
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--blur-amount));
+    -webkit-backdrop-filter: blur(var(--blur-amount));
+    border: 1px solid var(--card-border);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 自定义单选按钮样式 */
+input[type="radio"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--accent-color);
+    border-radius: 50%;
+    outline: none;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+input[type="radio"]:checked {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+}
+
+input[type="radio"]:checked::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: white;
+}
+
+/* 自定义输入框样式 */
+input[type="text"] {
+    transition: all 0.3s ease;
+    border: 1px solid var(--card-border);
+    background-color: var(--card-bg);
+    color: var(--text-color);
+}
+
+input[type="text"]:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 2px rgba(41, 153, 255, 0.2);
+}
+
+/* 按钮样式 */
+button {
+    transition: all 0.3s ease;
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: var(--hover-color);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+/* 版本信息样式 */
+.version-info {
+    transition: all 0.3s ease;
+}
+
+.version-info:hover {
+    background: var(--accent-color);
+    color: white;
+}
+
+/* 响应式调整 */
+@media (max-width: 640px) {
+    .settings-container {
+        width: 95%;
+        padding: 15px;
+        margin: 30px auto;
+    }
+
+    .radio-group {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .back-to-home {
+        top: 10px;
+        left: 10px;
+        padding: 8px 15px;
+        font-size: 14px;
+    }
+}
+
+/* 背景预览动画 */
+.background-preview {
+    transition: all 0.3s ease;
+}
+
+.background-preview:hover {
+    transform: scale(1.02);
+}
+
+/* 模态框动画 */
+.modal-content {
+    animation: modalFadeIn 0.3s ease-in-out;
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--blur-amount));
+    -webkit-backdrop-filter: blur(var(--blur-amount));
+    border: 1px solid var(--card-border);
+    color: var(--text-color);
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -60%);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}
+
+/* 添加主题切换过渡效果 */
+body, .settings-container, input[type="text"], button, .modal-content {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}

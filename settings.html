@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>系统设置 - Star.Lumina</title>
+    <link rel="shortcut icon" href="https://ico.starlumina.com/logo.ico" type="image/x-icon" />
+    <link href="css/style.css" rel="stylesheet" />
+    <link href="css/settings.css" rel="stylesheet" />
+    <script src="js/jquery.min.js"></script>
+    <style>
+        html, body {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            overflow-x: hidden;
+        }
+        .settings-container {
+            position: relative;
+            width: 90%;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: var(--card-bg);
+            backdrop-filter: blur(var(--blur-amount));
+            -webkit-backdrop-filter: blur(var(--blur-amount));
+            border-radius: 10px;
+            border: 1px solid var(--card-border);
+            color: var(--text-color);
+            z-index: 100;
+        }
+
+        .settings-section {
+            margin-bottom: 30px;
+        }
+
+        .settings-section h2 {
+            margin-bottom: 15px;
+            font-size: 1.5em;
+            color: var(--text-color);
+        }
+
+        .settings-option {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .settings-option label {
+            cursor: pointer;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 20px;
+        }
+
+        .radio-group label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: var(--text-color);
+        }
+
+        .background-preview {
+            width: 100%;
+            height: 150px;
+            border-radius: 8px;
+            margin-top: 10px;
+            background-size: cover;
+            background-position: center;
+            border: 1px solid var(--card-border);
+        }
+
+        .version-info {
+            cursor: pointer;
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 5px;
+            background: var(--hover-color);
+            color: var(--text-color);
+        }
+
+        #uploadBackgroundBtn {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        #uploadBackgroundBtn:hover {
+            opacity: 0.9;
+        }
+
+        #backgroundUrlInput {
+            width: 100%;
+            padding: 8px;
+            margin-top: 10px;
+            border: 1px solid var(--card-border);
+            border-radius: 5px;
+            background: var(--card-bg);
+            color: var(--text-color);
+        }
+
+        .settings-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .settings-btn {
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            border: none;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .save-btn {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .save-btn:hover {
+            opacity: 0.9;
+        }
+
+        .reset-btn {
+            background: var(--card-bg);
+            color: var(--text-color);
+            border: 1px solid var(--card-border);
+        }
+
+        .reset-btn:hover {
+            background: var(--hover-color);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 500px;
+            width: 90%;
+            backdrop-filter: blur(var(--blur-amount));
+            -webkit-backdrop-filter: blur(var(--blur-amount));
+            border: 1px solid var(--card-border);
+            color: var(--text-color);
+        }
+
+        .close-modal {
+            position: absolute;
+            right: 15px;
+            top: 15px;
+            cursor: pointer;
+            font-size: 20px;
+            color: var(--text-color);
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        .back-to-home {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            padding: 10px 20px;
+            background: var(--card-bg);
+            backdrop-filter: blur(var(--blur-amount));
+            -webkit-backdrop-filter: blur(var(--blur-amount));
+            border: 1px solid var(--card-border);
+            border-radius: 5px;
+            color: var(--text-color);
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .back-to-home:hover {
+            background: var(--hover-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="bgo" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;"></div>
+
+    <a href="/" class="back-to-home">返回首页</a>
+
+    <div class="settings-container">
+        <div class="settings-section">
+            <h2>主题设置</h2>
+            <div class="radio-group">
+                <label>
+                    <input type="radio" name="theme" value="light" id="lightTheme">
+                    <span>浅色模式</span>
+                </label>
+                <label>
+                    <input type="radio" name="theme" value="dark" id="darkTheme">
+                    <span>深色模式</span>
+                </label>
+                <label>
+                    <input type="radio" name="theme" value="auto" id="autoTheme">
+                    <span>跟随系统</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="settings-section">
+            <h2>链接打开方式</h2>
+            <div class="radio-group">
+                <label>
+                    <input type="radio" name="linkTarget" value="_blank" id="newTabOption">
+                    <span>新标签页打开</span>
+                </label>
+                <label>
+                    <input type="radio" name="linkTarget" value="_self" id="sameTabOption">
+                    <span>当前标签页打开</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="settings-section">
+            <h2>背景设置</h2>
+            <div class="radio-group">
+                <label>
+                    <input type="radio" name="background" value="bing" id="bingBackground">
+                    <span>必应每日一图</span>
+                </label>
+                <label>
+                    <input type="radio" name="background" value="custom" id="customBackground">
+                    <span>自定义背景</span>
+                </label>
+            </div>
+            <div id="customBackgroundOptions" style="display: none;">
+                <input type="text" id="backgroundUrlInput" placeholder="输入图片URL">
+                <button id="uploadBackgroundBtn">上传图片</button>
+                <input type="file" id="fileInput" accept=".jpg,.jpeg,.png,.webp">
+                <div class="background-preview" id="backgroundPreview"></div>
+            </div>
+        </div>
+
+        <div class="settings-section">
+            <div class="settings-buttons">
+                <button id="saveSettings" class="settings-btn save-btn">保存设置</button>
+                <button id="resetSettings" class="settings-btn reset-btn">恢复默认</button>
+            </div>
+        </div>
+
+        <div class="settings-section">
+            <h2>版本信息</h2>
+            <div class="version-info" id="versionInfo">当前版本: <span id="currentVersion">加载中...</span></div>
+            <div style="margin-top: 10px; font-size: 0.9em; color: var(--text-color-secondary);">点击版本号查看更新内容</div>
+        </div>
+    </div>
+
+    <div class="modal" id="updateModal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>版本更新内容</h2>
+            <div id="updateContent"></div>
+        </div>
+    </div>
+
+    <script>
+        console.log("Script started");
+        // 默认设置
+        const defaultSettings = {
+            theme: 'light',
+            linkTarget: '_blank',
+            backgroundType: 'bing',
+            customBackgroundUrl: ''
+        };
+
+        // 预加载版本信息
+        fetch('config/version.json')
+            .then(response => response.json())
+            .then(data => {
+                if (data && data.version) {
+                    window.versionData = data;
+                    if (document.getElementById('currentVersion')) {
+                        document.getElementById('currentVersion').textContent = data.version;
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error preloading version:', error);
+            });
+
+        // 初始化设置
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log("DOM Content Loaded");
+            
+            // 如果版本信息已预加载，直接显示
+            if (window.versionData && window.versionData.version) {
+                document.getElementById('currentVersion').textContent = window.versionData.version;
+            }
+            
+            // 初始化主题
+            const theme = localStorage.getItem('theme') || defaultSettings.theme;
+            document.querySelector(`input[name="theme"][value="${theme}"]`).checked = true;
+            if (theme === 'auto') {
+                if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                }
+            } else {
+                document.documentElement.setAttribute('data-theme', theme);
+            }
+
+            // 初始化背景
+            const backgroundType = localStorage.getItem('backgroundType') || defaultSettings.backgroundType;
+            document.querySelector(`input[name="background"][value="${backgroundType}"]`).checked = true;
+            if (backgroundType === 'bing') {
+                document.querySelector('.bgo').style.background = 'url(https://bing.starlumina.com/1920x1080)';
+                document.querySelector('.bgo').style.backgroundSize = 'cover';
+            } else if (backgroundType === 'custom') {
+                document.getElementById('customBackgroundOptions').style.display = 'block';
+                const customBgUrl = localStorage.getItem('customBackgroundUrl');
+                if (customBgUrl) {
+                    document.getElementById('backgroundUrlInput').value = customBgUrl;
+                    document.getElementById('backgroundPreview').style.backgroundImage = `url(${customBgUrl})`;
+                    document.querySelector('.bgo').style.background = `url(${customBgUrl})`;
+                    document.querySelector('.bgo').style.backgroundSize = 'cover';
+                }
+            }
+
+            // 初始化链接打开方式
+            const linkTarget = localStorage.getItem('linkTarget') || defaultSettings.linkTarget;
+            document.querySelector(`input[name="linkTarget"][value="${linkTarget}"]`).checked = true;
+
+            // 如果版本信息未预加载，尝试再次加载
+            if (!window.versionData) {
+                fetch('config/version.json')
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data && data.version) {
+                            window.versionData = data;
+                            document.getElementById('currentVersion').textContent = data.version;
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error loading version:', error);
+                        document.getElementById('currentVersion').textContent = '加载失败';
+                    });
+            }
+        });
+
+        // 主题切换
+        document.querySelectorAll('input[name="theme"]').forEach(input => {
+            input.addEventListener('change', function() {
+                const theme = this.value;
+                localStorage.setItem('theme', theme);
+                if (theme === 'auto') {
+                    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                        document.documentElement.setAttribute('data-theme', 'dark');
+                    } else {
+                        document.documentElement.setAttribute('data-theme', 'light');
+                    }
+                } else {
+                    document.documentElement.setAttribute('data-theme', theme);
+                }
+            });
+        });
+
+        // 链接打开方式
+        document.querySelectorAll('input[name="linkTarget"]').forEach(input => {
+            input.addEventListener('change', function() {
+                localStorage.setItem('linkTarget', this.value);
+            });
+        });
+
+        // 背景设置
+        document.querySelectorAll('input[name="background"]').forEach(input => {
+            input.addEventListener('change', function() {
+                const type = this.value;
+                localStorage.setItem('backgroundType', type);
+                document.getElementById('customBackgroundOptions').style.display = 
+                    type === 'custom' ? 'block' : 'none';
+                
+                if (type === 'bing') {
+                    document.querySelector('.bgo').style.background = 'url(https://bing.starlumina.com/1920x1080)';
+                    document.querySelector('.bgo').style.backgroundSize = 'cover';
+                }
+            });
+        });
+
+        // 背景URL输入
+        document.getElementById('backgroundUrlInput').addEventListener('input', function() {
+            const url = this.value;
+            if (url) {
+                localStorage.setItem('customBackgroundUrl', url);
+                document.getElementById('backgroundPreview').style.backgroundImage = `url(${url})`;
+                document.querySelector('.bgo').style.background = `url(${url})`;
+                document.querySelector('.bgo').style.backgroundSize = 'cover';
+            }
+        });
+
+        // 上传图片
+        document.getElementById('uploadBackgroundBtn').addEventListener('click', function() {
+            document.getElementById('fileInput').click();
+        });
+
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('图片大小不能超过5MB');
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const dataUrl = e.target.result;
+                    localStorage.setItem('customBackgroundUrl', dataUrl);
+                    document.getElementById('backgroundPreview').style.backgroundImage = `url(${dataUrl})`;
+                    document.querySelector('.bgo').style.background = `url(${dataUrl})`;
+                    document.querySelector('.bgo').style.backgroundSize = 'cover';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // 版本信息点击事件
+        document.getElementById('versionInfo').addEventListener('click', function() {
+            // 如果版本信息已预加载，直接使用
+            if (window.versionData && window.versionData.updateContent) {
+                document.getElementById('updateContent').innerHTML = window.versionData.updateContent;
+                document.getElementById('updateModal').style.display = 'block';
+            } else {
+                // 否则重新获取
+                fetch('config/version.json')
+                    .then(response => response.json())
+                    .then(data => {
+                        window.versionData = data;
+                        if (data && data.updateContent) {
+                            document.getElementById('updateContent').innerHTML = data.updateContent;
+                        }
+                        document.getElementById('updateModal').style.display = 'block';
+                    })
+                    .catch(error => {
+                        console.error('Error loading version info:', error);
+                        document.getElementById('updateContent').innerHTML = '加载更新内容失败，请稍后重试';
+                        document.getElementById('updateModal').style.display = 'block';
+                    });
+            }
+        });
+
+        // 关闭模态框
+        document.querySelector('.close-modal').addEventListener('click', function() {
+            document.getElementById('updateModal').style.display = 'none';
+        });
+
+        // 点击模态框外部关闭
+        window.addEventListener('click', function(event) {
+            const modal = document.getElementById('updateModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+        
+        // 保存设置按钮点击事件
+        document.getElementById('saveSettings').addEventListener('click', function() {
+            console.log("Save button clicked");
+            const currentSettings = {
+                theme: document.querySelector('input[name="theme"]:checked').value,
+                linkTarget: document.querySelector('input[name="linkTarget"]:checked').value,
+                backgroundType: document.querySelector('input[name="background"]:checked').value,
+                customBackgroundUrl: document.getElementById('backgroundUrlInput').value
+            };
+
+            console.log("Current settings:", currentSettings);
+
+            // 保存所有设置到 localStorage
+            Object.entries(currentSettings).forEach(([key, value]) => {
+                localStorage.setItem(key, value);
+                console.log(`Saved ${key}: ${value}`);
+            });
+
+            alert('设置已保存！');
+        });
+
+        // 恢复默认设置按钮点击事件
+        document.getElementById('resetSettings').addEventListener('click', function() {
+            if (confirm('确定要恢复默认设置吗？这将清除所有自定义设置。')) {
+                // 恢复默认设置
+                Object.entries(defaultSettings).forEach(([key, value]) => {
+                    localStorage.setItem(key, value);
+                });
+
+                // 更新界面
+                document.querySelector(`input[name="theme"][value="${defaultSettings.theme}"]`).checked = true;
+                document.querySelector(`input[name="linkTarget"][value="${defaultSettings.linkTarget}"]`).checked = true;
+                document.querySelector(`input[name="background"][value="${defaultSettings.backgroundType}"]`).checked = true;
+                document.getElementById('backgroundUrlInput').value = defaultSettings.customBackgroundUrl;
+                document.getElementById('customBackgroundOptions').style.display = 'none';
+                
+                // 更新背景
+                document.querySelector('.bgo').style.background = 'url(https://bing.starlumina.com/1920x1080)';
+                document.querySelector('.bgo').style.backgroundSize = 'cover';
+                
+                // 更新主题
+                document.documentElement.setAttribute('data-theme', defaultSettings.theme);
+
+                alert('已恢复默认设置！');
+            }
+        });
+    </script>
+</body>
+</html>
